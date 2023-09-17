@@ -88,6 +88,7 @@ const Login = ({setStage, navigation}) => {
                     width: '90%',
                     borderRadius: 10,
                     paddingBottom: 20,
+                    alignSelf:'center'
                 }}
             >
                 <Image source={require('../../assets/login.jpg')}

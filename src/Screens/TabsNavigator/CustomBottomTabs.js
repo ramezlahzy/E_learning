@@ -60,8 +60,8 @@ const TabItem = ({
                 flex: 1,
                 alignItems: "center",
                 justifyContent: "center",
-                flexDirection: "row",
-                paddingVertical: 8,
+                flexDirection: "column",
+                paddingVertical: 4,
             }}
         >
             {/*<Animated.View*/}
@@ -95,18 +95,18 @@ const TabItem = ({
                 />
             </View>
             {/*</Animated.View>*/}
-            {isActive && (
+            {/*{isActive && (*/}
                 <Text
                     style={{
                         marginLeft: 4,
                         fontSize: 12,
                         fontWeight: "600",
-                        color: colors.primary,
+                        color: isActive ? colors.primary : 'grey'
                     }}
                 >
                     {routeName}
                 </Text>
-            )}
+            {/*)}*/}
         </Pressable>
     );
 };

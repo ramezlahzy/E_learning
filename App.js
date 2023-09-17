@@ -13,6 +13,7 @@ import Welcome from "./src/Screens/Welcome/Welcome";
 import TabsNavigator from "./src/Screens/TabsNavigator/TabsNavigator";
 import Login from "./src/Screens/Login/Login";
 import Register from "./src/Screens/Register/Register";
+import Pay from "./src/Screens/Pay/Pay";
 // import { createDrawerNavigator } from 'react-navigation-drawer';
 
 const Stack = createNativeStackNavigator();
@@ -58,6 +59,11 @@ function App() {
                         title: 'Welcome',
                         headerShown: false
                     }}
+                />
+                <Stack.Screen name={'Pay'} component={Pay}
+                                options={{
+                                    title:"اشحن",
+                                }}
                 />
 
             </Stack.Navigator>

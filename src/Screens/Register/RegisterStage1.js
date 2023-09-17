@@ -111,6 +111,7 @@ const RegisterStage1 = ({setStage,navigation}) => {
                     borderRadius: 10,
                     paddingBottom: 20,
                     marginBottom: 20,
+                    alignSelf:'center'
                 }}
             >
                 <Image source={require('../../assets/login.jpg')}

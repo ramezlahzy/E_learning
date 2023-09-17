@@ -48,16 +48,15 @@ const Splash = ({navigation, route}) => {
     useEffect(() => {
         //timer
         setTimeout(() => {
-            // auth().onAuthStateChanged((user) => {
-            //     if (user) {
-            //         navigation.replace('TabsNavigator')
-            //     } else {
-            //         navigation.replace('Welcome')
-            //     }
-            // });
-            navigation.replace('Welcome')
-            }
-            , 2000);
+            auth().onAuthStateChanged((user) => {
+                if (user) {
+                    navigation.replace('TabsNavigator')
+                } else {
+                    navigation.replace('Welcome')
+                }
+            });
+            // navigation.replace('Welcome')
+            }, 2000);
     }, []);
     useEffect(() => {
         const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
