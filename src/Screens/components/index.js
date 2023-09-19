@@ -1,4 +1,4 @@
-import {Text, TextInput, View} from "react-native";
+import {Text, TextInput, View, StyleSheet} from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 const InputFeild = ({feildName, iconName, setFeild, feild, error, placeHolder}) => {
@@ -69,4 +69,33 @@ const InputFeild = ({feildName, iconName, setFeild, feild, error, placeHolder}) 
         </View>
     )
 }
-export {InputFeild}
+const ProgressBar = ({progress}) => {
+    return (
+        <View style={styles.progressBar}>
+            <View style={[styles.progress, {width: `${progress}%`}]}></View>
+        </View>
+    );
+};
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    progressBar: {
+        width: '90%',
+        height: 10,
+        margin: 10,
+        backgroundColor: '#ccc',
+        borderRadius: 2,
+        overflow: 'hidden',
+        alignSelf: 'center',
+    },
+    progress: {
+        height: '100%',
+        backgroundColor: 'rgb(102,148,229)',
+    },
+});
+
+
+export {InputFeild, ProgressBar}

@@ -1,7 +1,15 @@
-import {Image, ScrollView, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {Image, ScrollView, Text, TextInput, TouchableOpacity, View,Linking} from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 const HomeScreen = ({navigation, route}) => {
+    const openFacebookUrl = () => {
+        const facebookUrl = 'https://www.facebook.com/samuel.sharkawy'; // Replace with your Facebook URL
+
+        Linking.openURL(facebookUrl)
+            .catch((error) => {
+                console.error('Error opening Facebook URL:', error);
+            });
+    };
     return (
         <ScrollView>
             <View
@@ -49,6 +57,7 @@ const HomeScreen = ({navigation, route}) => {
                             flex: 1,
                             justifyContent: "center",
                             alignItems: "center",
+                            flexDirection: "column",
                         }}>
                             <Text style={{
                                 fontSize: 20,
@@ -61,6 +70,27 @@ const HomeScreen = ({navigation, route}) => {
                                 {"\n"}
                                 صموئيل شرقاوى
                             </Text>
+                            <TouchableOpacity
+                                onPress={openFacebookUrl}
+                            style={{
+                                width: 100,
+                                height: 40,
+                                margin: 5,
+                                backgroundColor: "white",
+                                borderRadius: 10,
+                            }}
+                            >
+                                <Text style={{
+                                    fontSize: 20,
+                                    fontWeight: "bold",
+                                    color: "grey",
+                                    textAlign: "center",
+                                    marginTop: 5,
+                                }}
+                                >
+                                    تابعنا
+                                </Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
 
@@ -85,7 +115,6 @@ const HomeScreen = ({navigation, route}) => {
                         }}
                     />
                     <Ionicons name={"search"} size={24} color={"black"} style={{marginHorizontal: 10}}/>
-
                 </View>
                 <Class clas={"الصف الاول الثانوى"} image={require('../../../assets/study1.jpg')}/>
                 <Class clas={"الصف الثانى الثانوى"} image={require('../../../assets/study2.jpg')}/>

@@ -30,7 +30,7 @@ const TabsNavigator = ({navigation,route}) => {
                     name={'محاضراتى'}
                     component={MyItemsScreen}
                     options={{
-                        headerShown: false,
+                        title: 'محاضراتى',
                         tabBarIcon(props) {
                             return <Ionicons name="bookmark" {...props} />;
                         },

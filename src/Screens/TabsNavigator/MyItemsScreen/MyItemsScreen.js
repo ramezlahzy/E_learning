@@ -7,6 +7,7 @@ import { FlatList } from 'react-native';
 import { Dimensions } from 'react-native';
 import Colors from '../../../Shared/Colors';
 import { Button } from 'react-native';
+import Lectures from "../../Lectures/Lectures";
 // import ProgressBar from '../Components/ProgressBar';
 // import Services from '../Shared/Services';
 // import GlobalApi from '../Shared/GlobalApi';
@@ -57,6 +58,6 @@ export default function CourseChapter({navigation,route}) {
     //     }
     // }
     return (
-        <Text>hello</Text>
+        <Lectures navigation={navigation} route={route}/>
     )
 }

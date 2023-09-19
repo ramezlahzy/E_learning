@@ -14,6 +14,9 @@ import TabsNavigator from "./src/Screens/TabsNavigator/TabsNavigator";
 import Login from "./src/Screens/Login/Login";
 import Register from "./src/Screens/Register/Register";
 import Pay from "./src/Screens/Pay/Pay";
+import PaymentWebView from "./src/Screens/Pay/PaymentWebView";
+import OneLecture from "./src/Screens/OneLecture/OneLecture";
+import Lectures from "./src/Screens/Lectures/Lectures";
 // import { createDrawerNavigator } from 'react-navigation-drawer';
 
 const Stack = createNativeStackNavigator();
@@ -61,9 +64,21 @@ function App() {
                     }}
                 />
                 <Stack.Screen name={'Pay'} component={Pay}
-                                options={{
-                                    title:"اشحن",
-                                }}
+                              options={{
+                                  title: "اشحن",
+                              }}
+                />
+                <Stack.Screen name={'PaymentWebView'} component={PaymentWebView}
+                              options={{
+                                  title: "اشحن",
+                                  headerShown: false
+                              }}
+                />
+                <Stack.Screen name={'OneLecture'} component={OneLecture}
+                              options={({route}) => ({title: route.params.title})}
+                />
+                <Stack.Screen name={'Lectures'} component={Lectures}
+                              options={({route}) => ({title: route.params.title})}
                 />
 
             </Stack.Navigator>

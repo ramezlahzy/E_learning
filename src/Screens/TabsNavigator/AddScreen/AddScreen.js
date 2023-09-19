@@ -1,11 +1,22 @@
-import {FlatList, Image, RefreshControl, ScrollView, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {
+    Button,
+    FlatList,
+    Image,
+    Modal,
+    RefreshControl,
+    ScrollView,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
+} from "react-native";
 import {useEffect, useState} from "react";
 import {getAllClasses, getAllLectures, getAllMonths, getAllOrderByLecture, getAllOrderByMonth} from "../../../Backend";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import LoadingAdd from "./LoadingAdd";
 import auth from "@react-native-firebase/auth";
 
-const AddScreen = () => {
+const AddScreen = ({navigation}) => {
     const [classes, setClasses] = useState([]);
     const [months, setMonths] = useState([]);
     const [lectures, setLectures] = useState([]);
@@ -13,6 +24,7 @@ const AddScreen = () => {
     const [orderByMonth, setOrderByMonth] = useState([]);
     const [loading, setLoading] = useState(false);
     const [selectedClass, setSelectedClass] = useState("1");
+    const userBalance = 100;
     useEffect(() => {
         refresh();
     }, []);
@@ -48,7 +60,7 @@ const AddScreen = () => {
                 >
                     {/*<Card/>*/}
                     <Image source={require('../../../assets/backgroundScience.jpg')}
-                           style={{margin: 20, width: '90%', height: 200, borderRadius: 10,alignSelf:'center'}}/>
+                           style={{margin: 20, width: '90%', height: 200, borderRadius: 10, alignSelf: 'center'}}/>
 
 
                     <FlatList
@@ -98,7 +110,7 @@ const AddScreen = () => {
                             return a.number - b.number;
                         }).map((item, index) => {
                             return (<Month month={item} index={index} orderByMonth={orderByMonth} lectures={lectures}
-                                           key={index}/>)
+                                           key={index} navigation={navigation}/>)
                         })
                     }
                 </View>
@@ -106,11 +118,30 @@ const AddScreen = () => {
         </ScrollView>
     )
 }
-const Month = ({month, index, orderByMonth, lectures}) => {
+const Month = ({month, index, orderByMonth, lectures, navigation}) => {
     const Colors = ['rgb(250,237,237)', 'rgb(236,240,248)', 'rgb(220,220,225)', 'rgb(238,235,220)', 'rgb(252,226,226)', 'rgb(252,226,226)']
     const isSubscribed = orderByMonth.find((order) => {
         return order.monthId === month.id && order.studentMail === auth().currentUser.email;
     })
+    const userBalance = 100;
+    const isFree = month.price === 0;
+    const [isAlertVisible, setAlertVisible] = useState(false);
+    const [isChargeVisible, setChargeVisible] = useState(false);
+    const showAlertBuy = () => {
+        setAlertVisible(true);
+    };
+
+    const hideAlert = () => {
+        setAlertVisible(false);
+    };
+    const showCharge = () => {
+        setChargeVisible(true);
+    }
+    const hideCharge = () => {
+        setChargeVisible(false);
+    }
+
+
     return (
         <View
             style={{
@@ -124,6 +155,11 @@ const Month = ({month, index, orderByMonth, lectures}) => {
 
             }}
         >
+            <CustomAlertBuy visible={isAlertVisible} message="This is a custom alert!" onClose={hideAlert}
+                            showCharge={showCharge}/>
+            <Charge visible={isChargeVisible} message="This is a custom alert!" onClose={hideCharge}
+                    navigation={navigation}/>
+
             <View
                 style={{
                     marginRight: 20,
@@ -212,6 +248,9 @@ const Month = ({month, index, orderByMonth, lectures}) => {
                     padding: 20,
 
                 }}
+                onPress={() => {
+                    navigation.navigate('Lectures', {month: month,title:month.name});
+                }}
             >
                 <View
                     style={{
@@ -227,7 +266,6 @@ const Month = ({month, index, orderByMonth, lectures}) => {
                             color: 'grey',
                             fontSize: 20,
                             fontWeight: 'bold',
-
                         }}
                     >
                         {month.name}
@@ -252,11 +290,23 @@ const Month = ({month, index, orderByMonth, lectures}) => {
                         justifyContent: 'center',
                         alignItems: 'center',
                         // backgroundColor: isSubscribed ? 'rgb(83,171,84)' : 'rgb(224,0,0)',
-                        backgroundColor: isSubscribed ? 'rgb(119,119,119)' : 'rgb(210,189,0)',
+                        backgroundColor: month.price === 0 ? 'rgb(255,132,132)' : isSubscribed ? 'rgb(119,119,119)' : 'rgb(210,189,0)',
                         borderRadius: 10,
                         padding: 5,
                         flexDirection: 'row-reverse',
                     }}
+                    onPress={
+
+                        () => {
+                            if (isFree || isSubscribed) {
+                                return;
+                            }
+                            // if (userBalance >= month.price) {
+                            showAlertBuy();
+                            // }
+                        }
+                    }
+
                 >
                     <Text
                         style={{
@@ -266,67 +316,153 @@ const Month = ({month, index, orderByMonth, lectures}) => {
                             textAlign: 'center',
                             marginHorizontal: 5,
                         }}
-                    >{isSubscribed ? 'تم الاشتراك' : 'اشترك الان'}</Text>
+                    >{isFree ? 'مجانى' : isSubscribed ? 'تم الاشتراك' : 'اشترك الان'}</Text>
                     {
-                        isSubscribed &&
-                        <Ionicons name={'checkmark'} color={'white'} size={24}/>
+                        isSubscribed && <Ionicons name={'checkmark'} color={'white'} size={24}/>
                     }
                 </TouchableOpacity>
             </TouchableOpacity>
         </View>
     )
 }
-const Card = () => {
+const CustomAlertBuy = ({visible, message, onClose, showCharge}) => {
     return (
-        <View
-            style={{
-                backgroundColor: 'rgb(102,148,229)',
-                width: '90%',
-                minHeight: 100,
-                marginTop: '10%',
-                borderRadius: 10,
-                justifyContent: 'center',
-                alignItems: 'center',
-                paddingBottom: 10,
-            }}
-        >
-            <Text
-                style={{
-                    color: 'white',
-                    fontSize: 20,
-                    fontWeight: 'bold',
-                    alignSelf: 'center',
-                    marginTop: "5%",
-                    textAlign: 'center',
-                }}
-            >
-                دلوقتى ممكن {'\n'} تشترك بالمحاضرة او الشهر
-            </Text>
-            <View style={{
-                width: "90%",
-                height: 50,
-                marginTop: 30,
-                borderRadius: 10,
-                backgroundColor: "white",
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "row",
-            }}>
-                <TextInput
-                    placeholder={"ابحث عن محاضرة"}
-                    placeholderTextColor={"grey"}
-                    style={{
-                        flex: 1,
-                        marginHorizontal: 10,
-                        color: "black",
-                    }}
-                />
-                <Ionicons name={"search"} size={24} color={"black"} style={{marginHorizontal: 10}}/>
+        <Modal visible={visible} transparent animationType="fade">
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', padding: 50}}>
+                <View style={{backgroundColor: 'white', padding: 20, borderRadius: 10, flexDirection: 'column'}}>
+                    <Text
+                        style={{
+                            color: 'black',
+                            fontSize: 20,
+                        }}
+                    >
+                        هل انت متاكد من انك تريد الاشتراك فى هذا الشهر
+                    </Text>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-around',
+                            marginTop: 20,
+                        }}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                onClose();
 
+                            }
+                            }
+                            style={{
+                                borderRadius: 10,
+                                backgroundColor: 'grey',
+                                padding: 10,
+                                paddingHorizontal: 20,
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    color: 'white',
+                                    fontSize: 15,
+                                }}
+                            >
+                                الغاء
+                            </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            onPress={() => {
+                                onClose();
+                                showCharge();
+                            }
+                            }
+                            style={{
+                                backgroundColor: 'rgb(102,148,229)',
+                                borderRadius: 10,
+                                padding: 10,
+                                paddingHorizontal: 20,
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    color: 'white',
+                                    fontSize: 15,
+                                }}
+                            >
+                                تأكيد
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </View>
+        </Modal>
+    );
+};
+const Charge = ({visible, message, onClose, navigation}) => {
+    return (
+        <Modal visible={visible} transparent animationType="fade">
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', padding: 50}}>
+                <View style={{backgroundColor: 'white', padding: 20, borderRadius: 10, flexDirection: 'column'}}>
+                    <Text
+                        style={{
+                            color: 'black',
+                            fontSize: 20,
+                        }}
+                    >
+                        رصيدك الحالى لا يكفى للشراء هل تريد شحن رصيدك{'\n'}الاشتراك الشهرى 100 جنيه
+                    </Text>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-around',
+                            marginTop: 20,
+                        }}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                onClose();
+                            }
+                            }
+                            style={{
+                                borderRadius: 10,
+                                backgroundColor: 'grey',
+                                padding: 10,
+                                paddingHorizontal: 20,
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    color: 'white',
+                                    fontSize: 15,
+                                }}
+                            >
+                                الغاء
+                            </Text>
+                        </TouchableOpacity>
 
-        </View>
-    )
-}
+                        <TouchableOpacity
+                            onPress={() => {
+                                onClose();
+                                navigation.navigate('Pay');
+                            }}
+                            style={{
+                                backgroundColor: 'rgb(102,148,229)',
+                                borderRadius: 10,
+                                padding: 10,
+                                paddingHorizontal: 20,
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    color: 'white',
+                                    fontSize: 15,
+                                }}
+                            >
+                                تأكيد
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        </Modal>
+    );
+};
+
 
 export default AddScreen;

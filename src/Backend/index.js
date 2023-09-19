@@ -24,4 +24,5 @@ const getAllOrderByMonth = async (setOrders) => {
     const orders = querySnapshot.docs.map(doc => doc.data());
     setOrders(orders);
 }
+
 export {getAllClasses, getAllMonths, getAllLectures, getAllOrderByLecture, getAllOrderByMonth};
