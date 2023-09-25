@@ -1,10 +1,9 @@
-import {FlatList, Image, Modal, Text, TouchableOpacity, View} from "react-native";
+import {Image, Modal, ScrollView, Text, TouchableOpacity, View} from "react-native";
 import {useEffect, useState} from "react";
 import {getAllLectures, getLecturesByMonth, openFacebookUrl} from "../../Backend";
 import LecturesLoading from "./LecturesLoading";
 import {ProgressBar, SubscriptionButton} from "../components";
 import auth from "@react-native-firebase/auth";
-import Ionicons from "react-native-vector-icons/Ionicons";
 
 const Lectures = ({navigation, route}) => {
     const monthName = route.params.title;
@@ -19,29 +18,43 @@ const Lectures = ({navigation, route}) => {
         });
     }, [])
     return (
-        <>
+        <ScrollView
+            style={{
+                backgroundColor: 'white',
+            }}
+        >
             {
                 loading && <LecturesLoading/>
             }
+
             {
                 !loading &&
-                <FlatList
-                    data={allLectures}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({item}) => <Lecture lecture={item} navigation={navigation} month={month}
-                                                     warningSubscribed={warningSubscribed}
-                                                     setWarningSubscribed={setWarningSubscribed}
-                    />}
-                    numColumns={1}
-                />
+                <View>
+                    <Image source={require('../../assets/calender.jpg')}
+                            style={{width: '100%', height: 300}}
+                    />
+                    {
+                        allLectures.map((lecture, index) => {
+                            return (
+                                <Lecture lecture={lecture} navigation={navigation} month={month}
+                                         warningSubscribed={warningSubscribed}
+                                         setWarningSubscribed={setWarningSubscribed}
+                                         key={index}
+                                />
+                            )
+                        })
+                    }
+                </View>
+
             }
-        </>
+        </ScrollView>
     )
 }
 const Lecture = ({month, lecture, navigation, warningSubscribed, setWarningSubscribed}) => {
     const isSubscribed = month.users.includes(auth().currentUser.uid) || lecture.users.includes(auth().currentUser.uid);
     const isFree = month.free || lecture.free;
     return (
+
         <View
             style={{
                 width: '100%',
@@ -177,7 +190,7 @@ const Warning = ({visible, onClose}) => {
                             fontSize: 20,
                         }}
                     >
-                       انت غير مشترك {'\n'}للاشتراك تواصل معنا
+                        انت غير مشترك {'\n'}للاشتراك تواصل معنا
                     </Text>
                     <View
                         style={{

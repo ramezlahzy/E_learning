@@ -3,6 +3,7 @@ import {useRef, useState} from "react";
 import DisplayVideo from "../components/DisplayVideo";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import LectureContent from "./LectureContent/LectureContent";
+import StudentQuestions from "./StudentQuestions/StudentQuestions";
 
 const OneLecture = ({navigation, route}) => {
     const {lecture} = route.params;
@@ -17,6 +18,7 @@ const OneLecture = ({navigation, route}) => {
                     style={{
                         width: '90%', height: 300,
                         marginBottom: 4,
+                        marginTop:20
                     }}
 
                 >
@@ -35,7 +37,9 @@ const OneLecture = ({navigation, route}) => {
                     >
                         <Ionicons name={'play-circle-outline'} size={70} color={'rgb(102,148,229)'}/>
                     </TouchableOpacity>
-                    <Image source={{uri: lecture.imageUrl}} style={{width: '100%', height: '100%', borderRadius: 20}}/>
+                    <Image source={require('../../assets/video.jpg')
+                        // {uri: lecture.imageUrl}
+                    } style={{width: '100%', height: '100%', borderRadius: 20}}/>
                 </View>
                 <TouchableOpacity
                     style={{
@@ -93,7 +97,7 @@ const OneLecture = ({navigation, route}) => {
                         choose === 'محتوى المحاضرة' && <LectureContent lecture={lecture} setProgress={setProgress} navigation={navigation}/>
                     }
                     {
-                        choose === 'اسأل براحتك' && <Text style={{fontSize: 20, color: 'black'}}>اسأل براحتك</Text>
+                        choose === 'اسأل براحتك' && <StudentQuestions navigation={navigation} lectureId={lecture.id}/>
                     }
                 </View>
             </View>
@@ -133,7 +137,7 @@ const ProgressBar = ({progress}) => {
             }, {width: `${progress}%`}]}>
 
             </View>
-            <Text style={{position:'absolute',top:2,color:'white',fontSize:15,alignSelf:'center'}}>{progress}%</Text>
+            {/*<Text style={{position:'absolute',top:2,color:'white',fontSize:15,alignSelf:'center'}}>{progress}%</Text>*/}
         </View>
     );
 };

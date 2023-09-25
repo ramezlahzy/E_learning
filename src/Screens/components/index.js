@@ -106,7 +106,7 @@ const SubscriptionButton = ({isFree, isSubscribed}) => {
             justifyContent: 'center',
             alignItems: 'center',
             // backgroundColor: isSubscribed ? 'rgb(83,171,84)' : 'rgb(224,0,0)',
-            backgroundColor: isFree ? 'rgb(255,132,132)' : isSubscribed ? 'rgb(119,119,119)' : 'rgb(210,189,0)',
+            backgroundColor: isFree ? 'rgb(255,132,132)' : isSubscribed ? 'rgb(119,119,119)' : 'rgb(102,148,229)',
             borderRadius: 10,
             padding: 5,
             flexDirection: 'row-reverse',
@@ -352,7 +352,7 @@ const ChooseQuestion = ({
                             studentAnswer,
                             solution
                         }) => {
-    const trueAnswer = studentAnswer === question[1];
+    const trueAnswer = studentAnswer === question.correctAnswer;
     return (
         <View style={{
             flex: 1,
@@ -365,7 +365,7 @@ const ChooseQuestion = ({
                 color: 'black',
             }}
             >
-                {index + 1} - {question[2]}
+                {index + 1} - {question.question}
             </Text>
             <View style={{
                 flex: 1,
@@ -376,9 +376,9 @@ const ChooseQuestion = ({
 
             }}
             >
-                <Answers answers={question[3]} index={index} setChooseQuestionsAnswers={setChooseQuestionsAnswers}
+                <Answers answers={question.options} index={index} setChooseQuestionsAnswers={setChooseQuestionsAnswers}
                          chooseQuestionsAnswers={chooseQuestionsAnswers}
-                         solution={solution} studentAnswer={studentAnswer} correctAnswer={question[1]}
+                         solution={solution} studentAnswer={studentAnswer} correctAnswer={question.correctAnswer}
                 />
                 {/*   wrong answer */}
                 {
@@ -407,7 +407,7 @@ const ChooseQuestion = ({
                     color: 'black',
                 }}
                 >
-                    الاجابة الصحيحة : {question[1]}
+                    الاجابة الصحيحة : {question.correctAnswer}
                 </Text>
             }
             <BR/>

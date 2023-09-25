@@ -1,7 +1,7 @@
 import firestore from '@react-native-firebase/firestore';
 import {Linking} from "react-native";
 import auth from "@react-native-firebase/auth";
-import { CommonActions } from '@react-navigation/native';
+import {CommonActions} from '@react-navigation/native';
 
 const getAllClasses = async (setClasses) => {
     const querySnapshot = await firestore().collection('Classes').get();
@@ -78,23 +78,41 @@ const createExamStudent = async (examId) => {
         })
 }
 const getExamStudent = async (examId, setExamStudent) => {
-    await firestore().collection('Exam_User').doc(examId+''+auth().currentUser.uid).get().then(q=>{
+    await firestore().collection('Exam_User').doc(examId + '' + auth().currentUser.uid).get().then(q => {
         setExamStudent(q.data())
     })
 }
-const submitExam=async (examId, examStudent) => {
-    console.log("examStudent ",examStudent)
+const submitExam = async (examId, examStudent) => {
     await firestore().collection('Exam_User').doc(examId + "" + auth().currentUser.uid).set(
         examStudent)
 }
-const clearStackAndNavigate = (navigation,to) => {
+const clearStackAndNavigate = (navigation, to) => {
     navigation.dispatch(
         CommonActions.reset({
             index: 0,
-            routes: [{ name: to}], // Replace 'Details' with the name of the screen you want to navigate to
+            routes: [{name: to}], // Replace 'Details' with the name of the screen you want to navigate to
         })
     );
 };
+const getQuestionsByTestBankId = async (setQuestions, testBankId) => {
+    const querySnapshot = await firestore().collection('TestBanks').where('id', '==', testBankId).get();
+    for (const doc of querySnapshot.docs) {
+        const questions = doc.data().questions;
+        const questionsArray = [];
+        const query = await firestore().collection('Questions').where('id', 'in', questions).get()
+        query.docs.forEach(doc => {
+            questionsArray.push(doc.data());
+        });
+        setQuestions(questionsArray);
+    }
+
+}
+const getLectureQuestions = async (setQuestions, lectureId) => {
+    const querySnapshot=await firestore().collection('StudentQuestions').where('lectureId','==',lectureId).get();
+    const questions=querySnapshot.docs.map(doc=>doc.data());
+    setQuestions(questions);
+
+}
 export {
     getAllClasses,
     getAllMonths,
@@ -108,5 +126,7 @@ export {
     createExamStudent,
     getExamStudent,
     submitExam,
-    clearStackAndNavigate
+    clearStackAndNavigate,
+    getQuestionsByTestBankId,
+    getLectureQuestions
 };

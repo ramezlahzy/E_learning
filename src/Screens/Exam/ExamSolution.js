@@ -16,7 +16,7 @@ const ExamSolution = ({navigation, route}) => {
     const getStudentAnswerChoose = (question) => {
         let solution = '';
         examStudent.chooseQuestions.forEach((q) => {
-            if (question[0] === q.questionId) {
+            if (question.id === q.questionId) {
                 solution = q.studentAnswer;
             }
         })
@@ -24,12 +24,16 @@ const ExamSolution = ({navigation, route}) => {
     }
     const [chooseQuestions, setChooseQuestions] = useState(questions.filter((question) => question.type === 'choose')
         .map((question) => {
-            return [
-                question.id,
-                question.correctAnswer,
-                question.question,
-                shuffleArray([question.correctAnswer, ...question.options]),
-            ]
+            return {
+                ...question,
+                options: shuffleArray([question.correctAnswer, ...question.options])
+            }
+            // return [
+            //     question.id,
+            //     question.correctAnswer,
+            //     question.question,
+            //     shuffleArray([question.correctAnswer, ...question.options]),
+            // ]
         })
     )
     const trueFalseQuestions = questions.filter((question) => question.type === 'trueFalse')

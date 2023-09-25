@@ -34,17 +34,25 @@ const AddScreen = ({navigation}) => {
         refresh();
     }, []);
     useEffect(() => {
-        if(months!==null && lectures!==null && classes!==null && selectedClass!==null){
+        if (months !== null && lectures !== null && classes !== null && selectedClass !== null) {
             setLoading(false);
         }
-    },[months, lectures, classes, selectedClass])
+    }, [months, lectures, classes, selectedClass])
 
     const refresh = () => {
         setLoading(true);
-        getAllClasses(setClasses)
-        getAllLectures(setLectures)
-        getClassById(setSelectedClass)
-        getAllMonths(setMonths)
+        getAllClasses(setClasses).catch((e) => {
+            console.log("all classes", e);
+        })
+        getAllLectures(setLectures).catch((e) => {
+            console.log("all lectures", e);
+        })
+        getClassById(setSelectedClass).catch((e) => {
+            console.log("class by id", e);
+        })
+        getAllMonths(setMonths).catch((e) => {
+            console.log("all month", e);
+        })
     }
 
     return (
@@ -55,16 +63,18 @@ const AddScreen = ({navigation}) => {
         >
 
             {
-                (loading||(months===null|| lectures===null|| classes===null|| selectedClass===null)) &&
+                (loading || (months === null || lectures === null || classes === null || selectedClass === null)) &&
                 <LoadingAdd/>
             }
             {
-                !(loading||(months===null|| lectures===null|| classes===null|| selectedClass===null)) &&
+                !(loading || (months === null || lectures === null || classes === null || selectedClass === null)) &&
 
                 <View
                     style={{
                         flex: 1,
                         alignItems: 'center',
+                        backgroundColor: 'white',
+                        paddingBottom: 20,
                     }}
                 >
 
@@ -72,16 +82,20 @@ const AddScreen = ({navigation}) => {
                         style={{
                             width: '100%',
                             marginBottom: 70,
-                            height: 200,
-
+                            height: 300,
+                            backgroundColor:'lightgrey',
+                            paddingBottom:40,
+                            borderBottomRightRadius: 40,
+                            borderBottomLeftRadius: 40,
                         }}
                     >
-                        <Image source={require("../../../assets/map.png")}
+                        <Image source={require("../../../assets/map3blue.png")}
                                style={{
                                    width: '100%',
                                    height: '100%',
                                    borderBottomRightRadius: 40,
                                    borderBottomLeftRadius: 40,
+                                   marginTop: 20,
                                }}
                                resizeMode={'cover'}
                         />
@@ -113,17 +127,28 @@ const AddScreen = ({navigation}) => {
                         </View>
                     </View>
 
+                    <View
+                        style={{
+                            width: '100%',
+                            borderRadius: 40,
+                            shadowColor: 'black',
+                            elevation: 5,
+                            paddingVertical: 15,
+                            backgroundColor: 'white'
+                        }}
+                    >
 
-                    {
-                        months.filter((month) => {
-                            return month.class === selectedClass;
-                        }).sort((a, b) => {
-                            return a.number - b.number;
-                        }).map((item, index) => {
-                            return (<Month month={item} index={index}  lectures={lectures}
-                                           key={index} navigation={navigation}/>)
-                        })
-                    }
+                        {
+                            months.filter((month) => {
+                                return month.class === selectedClass;
+                            }).sort((a, b) => {
+                                return a.number - b.number;
+                            }).map((item, index) => {
+                                return (<Month month={item} index={index} lectures={lectures}
+                                               key={index} navigation={navigation}/>)
+                            })
+                        }
+                    </View>
                 </View>
             }
         </ScrollView>

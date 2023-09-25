@@ -28,7 +28,7 @@ const LectureContent = ({lecture, setProgress,navigation}) => {
                         fieldName={'videoSeenUsers'}
                         lecture={lecture}
                         action={() => {
-                            // console.log('محتوى المحاضرة')
+                            navigation.navigate('DisplayVideo', {videoId: lecture.videoLink})
                         }}/>
 
             <CoursePart name={'بنك الاسئلة'} iconName={"book"}

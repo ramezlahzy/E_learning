@@ -11,12 +11,10 @@ const StartExam = ({navigation, route}) => {
     const [unable, setUnable] = useState(false)
     const [chooseQuestions, setChooseQuestions] = useState(questions.filter((question) => question.type === 'choose')
         .map((question) => {
-            return [
-                question.id,
-                question.correctAnswer,
-                question.question,
-                shuffleArray([question.correctAnswer, ...question.options]),
-            ]
+            return {
+                ...question,
+                options: shuffleArray([question.correctAnswer, ...question.options]),
+            }
         })
     )
     const [chooseQuestionsAnswers, setChooseQuestionsAnswers] = useState(questions.filter((question) => question.type === 'choose')
@@ -33,7 +31,7 @@ const StartExam = ({navigation, route}) => {
         for (let i = 0; i < chooseQuestions.length; i++) {
             const question = chooseQuestions[i]
             const answer = chooseQuestionsAnswers[i]
-            submitChoose.push({studentAnswer: answer, questionId: question[0]})
+            submitChoose.push({studentAnswer: answer, questionId: question.id})
         }
         const submitTrueFalse = []
         for (let i = 0; i < trueFalseQuestions.length; i++) {
@@ -57,6 +55,7 @@ const StartExam = ({navigation, route}) => {
         ).catch(e => {
             setLoading(false)
             showToast('حدث خطأ ما الرجاء المحاولة مرة اخرى')
+            // console.log(examStudent)
             setUnable(true)
         })
     }
@@ -121,17 +120,6 @@ const StartExam = ({navigation, route}) => {
                         onPress: () => null,
                         style: 'cancel',
                     },
-                    // {
-                    //     text: 'Yes',
-                    //     onPress: () => {
-                    //         backHandler.remove();
-                    //         navigation.goBack();
-                    //         navigation.goBack()
-                    //         // clearStackAndNavigate(navigation,'TabsNavigator')
-                    //
-                    //     },
-                    // },
-
                 ],
                 {cancelable: false}
             );
