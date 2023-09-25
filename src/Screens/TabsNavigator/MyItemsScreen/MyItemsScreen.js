@@ -1,63 +1,65 @@
 
-import { View, Text } from 'react-native'
+import {View, Text, Image} from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { TouchableOpacity } from 'react-native'
-import { useNavigation, useRoute } from '@react-navigation/native';
 import { FlatList } from 'react-native';
-import { Dimensions } from 'react-native';
-import Colors from '../../../Shared/Colors';
-import { Button } from 'react-native';
-import Lectures from "../../Lectures/Lectures";
-// import ProgressBar from '../Components/ProgressBar';
-// import Services from '../Shared/Services';
-// import GlobalApi from '../Shared/GlobalApi';
-// import { AuthContext } from '../Context/AuthContext';
-
+import {getAllLectures} from "../../../Backend";
+import LecturesLoading from "../../Lectures/LecturesLoading";
+import {ProgressBar} from "../../components";
 
 export default function CourseChapter({navigation,route}) {
-    // const navigation=useNavigation();
-    const param=useRoute().params;
-    const [chapter,setChapter]=useState([])
-    const [run,setRun]=useState(false);
-    const [progress,setProgress]=useState(0);
-    // const {userData,setUserData}=useContext(AuthContext);
-    let chapterRef;
-    //
-    // useEffect(()=>{
-    //
-    //     setProgress(0);
-    //     setChapter(param.courseContent.Content)
-    //
-    // },[])
-    // const onClickNext=(index)=>{
-    //     setRun(false);
-    //     setProgress(index+1/chapter.length)
-    //     try{
-    //         chapterRef.scrollToIndex({animated:true,index:index+1})
-    //     }
-    //     catch(e)
-    //     {
-    //         let coursePro;
-    //         const data={
-    //             data:{
-    //                 uid:userData.id,
-    //                 courseId:param.courseId,
-    //                 courseContentId:param.courseContent.id
-    //             }
-    //         }
-    //
-    //         GlobalApi.setCourseProgress(data).then(resp=>{
-    //             navigation.navigate({
-    //                 name:'course-detail' ,
-    //                 params:{courseContentId:param.courseContent.id},
-    //                 merge:true
-    //             })
-    //         })
-    //
-    //
-    //     }
-    // }
+    const [allLectures, setAllLectures] = useState([]);
+    const [loading, setLoading] = useState(false);
+    useEffect(() => {
+        setLoading(true);
+        getAllLectures(setAllLectures).then(() => {
+            setLoading(false);
+        });
+    }, [])
     return (
-        <Lectures navigation={navigation} route={route}/>
+        <>
+            {
+                loading && <LecturesLoading/>
+            }
+            {
+                !loading &&
+                <FlatList
+                    data={allLectures}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({item}) => <Item item={item} navigation={navigation}/>} // Use your custom item component
+                    numColumns={2} // Set the number of columns to 2
+                />
+            }
+        </>
     )
 }
+const Item = ({item,navigation}) => {
+    return (
+        <TouchableOpacity
+            style={{
+                flex: 1,
+                margin: 20,
+                borderRadius: 10,
+                flexDirection: 'column',
+                backgroundColor: 'white',
+
+            }}
+            onPress={() => {
+                navigation.navigate('OneLecture', {
+                    item: item,
+                    title: item.lectureName,
+                });
+            }}
+        >
+            <Image
+                source={{uri: item.imageUrl}}
+                style={{width: '100%', height: 100,borderTopRightRadius:10,borderTopLeftRadius:10}}/>
+            <Text style={{fontSize: 15, color: 'grey', alignSelf: 'center'}}>{item.lectureName}</Text>
+            <ProgressBar progress={item.per}/>
+            <Text style={{fontSize: 15, color: 'grey', alignSelf: 'flex-start',marginHorizontal:10}}>{item.per}%</Text>
+
+        </TouchableOpacity>
+    )
+}
+
+

@@ -19,7 +19,7 @@ const RegisterStage2 = ({setStage,navigation}) => {
     const [existError, setExistError] = useState(false);
     const validate = () => {
         auth().onAuthStateChanged((user) => {
-            console.log("user", user)
+            // console.log("user", user)
             if (user) {
                 if (user.emailVerified) {
                     navigation.replace('TabNavigation');

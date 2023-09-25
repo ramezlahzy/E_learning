@@ -54,7 +54,7 @@ const RegisterStage1 = ({setStage,navigation}) => {
             auth()
                 .createUserWithEmailAndPassword(mail, password)
                 .then((userCredential) => {
-                    console.log('User account created & signed in!');
+                    // console.log('User account created & signed in!');
                     ToastAndroid.showWithGravity(
                         "تم انشاء الحساب بنجاح",
                         ToastAndroid.SHORT,

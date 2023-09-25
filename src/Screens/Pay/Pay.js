@@ -8,7 +8,7 @@ const Pay = ({navigation}) => {
     const [error, setError] = useState(false)
     const [loading, setLoading] = useState(false)
     const pay = () => {
-        console.log("amount ", amount)
+        // console.log("amount ", amount)
         if (amount === undefined || amount === null || amount === '' || isNaN(amount)) {
             setError(true)
             return;
@@ -218,8 +218,8 @@ const getOrder = async ({amount, auth_token}) => {
 }
 
 const getPaymentKey = async ({orderId, auth_token}) => {
-    console.log("orderId ", orderId)
-    console.log("auth_token ", auth_token)
+    // console.log("orderId ", orderId)
+    // console.log("auth_token ", auth_token)
     const body =
         {
             "auth_token": auth_token,

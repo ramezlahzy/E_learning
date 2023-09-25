@@ -2,6 +2,7 @@ import {Image, ScrollView, Text, TouchableOpacity, View} from "react-native";
 import {GoogleSignin, statusCodes, GoogleSigninButton} from '@react-native-google-signin/google-signin';
 import {useState} from "react";
 import auth from '@react-native-firebase/auth';
+import {openFacebookUrl} from "../../Backend";
 
 GoogleSignin.configure({
     webClientId: '777807118707-4cnr5h2q2bqkgr92vbkrutl1ch61p9hg.apps.googleusercontent.com'
@@ -10,14 +11,14 @@ const Welcome = ({navigation, route}) => {
     const [state, setState] = useState({});
     const signIn = async () => {
         try {
-            console.log('here1')
+            // console.log('here1')
             await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
-            console.log('here2')
+            // console.log('here2')
             const {idToken} = await GoogleSignin.signIn();
-            console.log('here3')
+            // console.log('here3')
             const googleCredential = auth.GoogleAuthProvider.credential(idToken);
             await auth().signInWithCredential(googleCredential)
-            console.log('here4')
+            // console.log('here4')
             navigation.replace('TabsNavigator')
         } catch (error) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -134,7 +135,7 @@ const Welcome = ({navigation, route}) => {
                                 borderWidth: .5,
                                 height: 50,
                             }}
-                            onPress={() => navigation.navigate('Register')}
+                            onPress={openFacebookUrl}
                         >
                             <Text
                                 style={{
@@ -166,7 +167,7 @@ const Welcome = ({navigation, route}) => {
                                 color: 'grey',
                             }}
                         >
-                            دخول عبر
+                          تواصل معنا عبر
                         </Text>
                         <View
                             style={{
@@ -181,9 +182,9 @@ const Welcome = ({navigation, route}) => {
                             {/*           style={{width: 50, height: 50, marginHorizontal: 10}}/>*/}
                             {/*</TouchableOpacity>*/}
                             <TouchableOpacity
-                                onPress={signIn}
+                                onPress={openFacebookUrl}
                             >
-                                <Image source={require('../../assets/icons8-google-48.png')}
+                                <Image source={require('../../assets/icons8-facebook-48.png')}
                                        style={{width: 50, height: 50, marginHorizontal: 10,marginBottom:10}}/>
                             </TouchableOpacity>
 

@@ -15,6 +15,7 @@ import Icon from 'react-native-ionicons'
 import {useEffect, useState} from "react";
 import {auth} from "../../Backend/firebase";
 import {InputFeild} from "../components";
+import {openFacebookUrl} from "../../Backend";
 
 const Login = ({setStage, navigation}) => {
     const [emailError, setEmailError] = useState('');
@@ -22,13 +23,7 @@ const Login = ({setStage, navigation}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    // useEffect(() => {
-    //     auth().onAuthStateChanged((user) => {
-    //         if (user) {
-    //             navigation.replace('TabsNavigator');
-    //         }
-    //     });
-    // }, []);
+
     const validate = () => {
         let valid = true;
         if (email.length === 0) {
@@ -50,7 +45,8 @@ const Login = ({setStage, navigation}) => {
                     ToastAndroid.show("تم تسجيل الدخول بنجاح", ToastAndroid.SHORT);
                     setLoading(false);
                 }).catch((error) => {
-                console.log(error.code);
+                    setLoading(false)
+                console.log(error);
                 let errorMessage = error.message;
                 if (error.code === 'auth/user-not-found') {
                     errorMessage = 'البريد الالكتروني غير مسجل';
@@ -179,7 +175,7 @@ const Login = ({setStage, navigation}) => {
                     }}
                 >
                     <TouchableOpacity
-                        onPress={() => navigation.replace('Register')}
+                        onPress={openFacebookUrl}
                     >
                         <Text
                             style={{
@@ -191,7 +187,7 @@ const Login = ({setStage, navigation}) => {
 
                             }}
                         >
-                            انشاء حساب
+                           تواصل معنا
                         </Text>
                     </TouchableOpacity>
                     <Text

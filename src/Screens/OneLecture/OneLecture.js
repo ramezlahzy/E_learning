@@ -1,39 +1,100 @@
-import {Button, ScrollView, Text, TouchableOpacity, View, StyleSheet} from "react-native";
-import YouTube from "react-native-youtube";
-import YoutubePlayer from 'react-native-youtube-iframe';
+import {Button, ScrollView, Text, TouchableOpacity, View, StyleSheet, Image, FlatList} from "react-native";
 import {useRef, useState} from "react";
-import YoutubeVideo from "../components/YoutubeVideo";
-import {WebView} from "react-native-webview";
-// import {Icon} from 'react-native-elements';
+import DisplayVideo from "../components/DisplayVideo";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import LectureContent from "./LectureContent/LectureContent";
 
 const OneLecture = ({navigation, route}) => {
-    const {item} = route.params;
-    const apiKey = 'YOUR_API_KEY'; // Replace with your YouTube Data API key
-    const videoId = 'Ks-_Mh1QhMc'; // Replace with the video ID you want to fetch
-
-    // Construct the API URL
-    const apiUrl = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${videoId}&key=${apiKey}`;
-    const [choose, setChoose] = useState('الدرس');
+    const {lecture} = route.params;
+    const [choose, setChoose] = useState('محتوى المحاضرة');
+    const [progress, setProgress] = useState(0);
+    const allContent=[{name:'محتوى المحاضرة',func:() => setChoose('محتوى المحاضرة')},
+        {name:'اسأل براحتك',func:() => setChoose('اسأل براحتك')},{name:'تنبيهات',func:() => setChoose('تنبيهات')}]
     return (
         <ScrollView>
-            <View style={{flex: 1}}>
-                <YoutubeVideo videoId={
-                    'k6kX23F7D7I'
-                }/>
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                <View
+                    style={{
+                        width: '90%', height: 300,
+                        marginBottom: 4,
+                    }}
+
+                >
+                    <TouchableOpacity
+                        style={{
+                            position: 'absolute',
+                            zIndex: 1,
+                            backgroundColor: 'white',
+                            borderRadius: 100,
+                            bottom: -35,
+                            right: 20,
+                        }}
+                        onPress={() => {
+                            navigation.navigate('DisplayVideo', {videoId: lecture.videoLink})
+                        }}
+                    >
+                        <Ionicons name={'play-circle-outline'} size={70} color={'rgb(102,148,229)'}/>
+                    </TouchableOpacity>
+                    <Image source={{uri: lecture.imageUrl}} style={{width: '100%', height: '100%', borderRadius: 20}}/>
+                </View>
+                <TouchableOpacity
+                    style={{
+                        width: 100,
+                        height: 40,
+                        backgroundColor: 'rgb(210,189,0)',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderRadius: 10,
+                        alignSelf: 'flex-start',
+                        margin: 10,
+                        padding: 1
+                    }}>
+                    <Text
+                        style={{
+                            fontSize: 15,
+                            fontWeight: 'bold',
+                            color: 'white',
+                            textAlign: 'center',
+                        }}
+                    >
+                        تم الاشتراك
+                    </Text>
+                </TouchableOpacity>
+                <Text style={{
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                    marginBottom: 10,
+                    color: 'black'
+                }}>{lecture.lectureName}</Text>
+
+                <Text style={{fontSize: 15, color: 'grey', textAlign: 'center', marginBottom: 10}}>
+                    الجزء الباقى
+                </Text>
+                <ProgressBar progress={progress}/>
                 <View style={{
                     width: '95%',
                     backgroundColor: 'white',
                     borderRadius: 20,
-                    minHeight: 200,
-                    alignSelf: 'center'
+                    alignSelf: 'center',
+                    alignItems: 'flex-start',
+                    shadowColor: 'black',
+                    elevation: 5,
+                    marginVertical: 10,
+                    padding: 10,
                 }}>
-                    <View style={{flexDirection: 'row-reverse', justifyContent: 'space-between', padding: 10}}>
-                        <Touch name={'الدرس'} onPress={() => setChoose('الدرس')} choose={choose}/>
-                        <Touch name={'الاسئلة'} onPress={() => setChoose('الاسئلة')} choose={choose}/>
-                        <Touch name={'امتحان سريع'} onPress={() => setChoose('امتحان سريع')} choose={choose}/>
 
-
-                    </View>
+                    <FlatList data={allContent} horizontal={true}  renderItem={
+                        ({item}) => {
+                            return (
+                                <Touch name={item.name} onPress={item.func} choose={choose}/>
+                            )
+                        }}/>
+                    {
+                        choose === 'محتوى المحاضرة' && <LectureContent lecture={lecture} setProgress={setProgress} navigation={navigation}/>
+                    }
+                    {
+                        choose === 'اسأل براحتك' && <Text style={{fontSize: 20, color: 'black'}}>اسأل براحتك</Text>
+                    }
                 </View>
             </View>
         </ScrollView>
@@ -42,17 +103,39 @@ const OneLecture = ({navigation, route}) => {
 const Touch = ({onPress, name, choose}) => {
     return (
         <TouchableOpacity onPress={onPress} style={{
-            backgroundColor: choose===name?'grey':'#6694e5',
+            backgroundColor: choose === name ? 'grey' : '#6694e5',
             borderRadius: 10,
             padding: 10,
             margin: 5,
             flex: 1,
             justifyContent: 'center',
             shadowColor: 'black',
-            elevation: 5
+            elevation: 5,
+
         }}>
             <Text style={{fontSize: 18, color: 'white', textAlign: 'center'}}>{name}</Text>
         </TouchableOpacity>
     )
 }
+const ProgressBar = ({progress}) => {
+    return (
+        <View style={{
+            width: '90%',
+            height: 25,
+            margin: 10,
+            backgroundColor: '#ccc',
+            borderRadius:30
+        }}>
+            <View style={[{
+                height: '100%',
+                backgroundColor: 'rgb(102,148,229)',
+                borderRadius:30
+            }, {width: `${progress}%`}]}>
+
+            </View>
+            <Text style={{position:'absolute',top:2,color:'white',fontSize:15,alignSelf:'center'}}>{progress}%</Text>
+        </View>
+    );
+};
+
 export default OneLecture;

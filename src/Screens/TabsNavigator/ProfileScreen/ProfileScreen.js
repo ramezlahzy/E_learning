@@ -61,7 +61,7 @@ const ProfileScreen = ({navigation}) => {
                     <View style={{
                         width: '75%',
                         backgroundColor: 'white',
-                        // height: 100,
+                        height: 100,
                         alignSelf: 'center',
                         borderRadius: 20,
                         shadowColor: 'black',
@@ -74,75 +74,6 @@ const ProfileScreen = ({navigation}) => {
                         position: 'absolute',
 
                     }}>
-                        <View
-                            style={{
-                                // flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-
-                            }}
-                        >
-
-                            <Text
-                                style={{
-                                    fontSize: 15,
-                                    fontWeight: 'bold',
-                                    color: 'grey',
-                                    textAlign: 'center',
-                                    borderRadius: 10,
-                                }}
-                            >
-                                رصيدك الحالي
-                            </Text>
-                        </View>
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                // flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                width: '100%',
-                            }}
-                        >
-                            <Text
-                                style={{
-                                    fontSize: 20,
-                                    fontWeight: 'bold',
-                                    color: 'black',
-                                    textAlign: 'center'
-                                }}
-                            >
-                                جنية 100
-                            </Text>
-                            <TouchableOpacity
-                                style={{
-                                    backgroundColor: '#d2bd00',
-                                    borderRadius: 10,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    margin: 5,
-                                    padding: 5,
-
-                                }}
-                                onPress={() => {
-                                    navigation.navigate('Pay')
-                                }}
-
-                            >
-                                <Text
-                                    style={{
-                                        fontSize: 15,
-                                        fontWeight: 'bold',
-                                        color: 'white',
-                                        textAlign: 'center'
-
-
-                                    }}
-                                >
-                                    اشحن
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
                     </View>
                 </View>
                 <SettingComponent

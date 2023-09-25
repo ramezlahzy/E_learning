@@ -17,6 +17,12 @@ import Pay from "./src/Screens/Pay/Pay";
 import PaymentWebView from "./src/Screens/Pay/PaymentWebView";
 import OneLecture from "./src/Screens/OneLecture/OneLecture";
 import Lectures from "./src/Screens/Lectures/Lectures";
+import DisplayVideo from "./src/Screens/components/DisplayVideo";
+import Exam from "./src/Screens/Exam/Exam";
+import StartExam from "./src/Screens/Exam/StartExam";
+import FinishedExam from "./src/Screens/Exam/FinishedExam";
+import ExamSolution from "./src/Screens/Exam/ExamSolution";
+import TestBank from "./src/Screens/TestBank";
 // import { createDrawerNavigator } from 'react-navigation-drawer';
 
 const Stack = createNativeStackNavigator();
@@ -75,12 +81,39 @@ function App() {
                               }}
                 />
                 <Stack.Screen name={'OneLecture'} component={OneLecture}
-                              options={({route}) => ({title: route.params.title})}
+                              options={{
+                                  title: "محتوى المحاضرة",
+                              }}
                 />
                 <Stack.Screen name={'Lectures'} component={Lectures}
                               options={({route}) => ({title: route.params.title})}
                 />
-
+                <Stack.Screen name={'DisplayVideo'} component={DisplayVideo}
+                              options={{
+                                  headerShown: false
+                              }}/>
+                <Stack.Screen name={'Exam'} component={Exam}
+                              options={{
+                                  title: "امتحان",
+                              }}/>
+                <Stack.Screen name={'StartExam'} component={StartExam}
+                              options={{
+                                  headerShown: false
+                              }}/>
+                <Stack.Screen name={'FinishedExam'} component={FinishedExam}
+                              options={{
+                                  headerShown: false
+                              }}
+                />
+                <Stack.Screen name={'ExamSolution'} component={ExamSolution}
+                              options={{
+                                  title: "حل الامتحان",
+                              }}
+                />
+                <Stack.Screen name={'TestBank'} component={TestBank}
+                              options={{
+                                  title: "بنك الاسئلة",
+                              }}/>
             </Stack.Navigator>
         </NavigationContainer>
     );
