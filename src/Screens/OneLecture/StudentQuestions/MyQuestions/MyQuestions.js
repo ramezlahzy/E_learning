@@ -1,12 +1,15 @@
 import {Image, Text, View} from "react-native";
 import {BR} from "../../../components";
 import LoadingQuestions from "../LoadingQuestions";
+import auth from "@react-native-firebase/auth";
 
 const MyQuestions = ({ loading,questions }) => {
+    const myQuestions = questions.filter(item => item.uid === auth().currentUser.uid).sort((a,b)=>b.date-a.date)
     return(
         <View
             style={{
                 width: '100%',
+                minHeight: 100,
             }}
         >
             {
@@ -14,7 +17,7 @@ const MyQuestions = ({ loading,questions }) => {
                 <LoadingQuestions/>
             }
             { !loading &&
-                questions.map((item, index) => {
+                myQuestions.map((item, index) => {
                     return (
                         <View
                             key={index}
@@ -37,34 +40,25 @@ const MyQuestions = ({ loading,questions }) => {
                                 }}
                             >
                                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                    {/*<Image*/}
-                                    {/*    source={item.studentImage}*/}
-                                    {/*    style={{*/}
-                                    {/*        width: 50,*/}
-                                    {/*        height: 50,*/}
-                                    {/*        borderRadius: 50,*/}
-                                    {/*        margin: 10,*/}
-
-                                    {/*    }}*/}
-                                    {/*/>*/}
-                                    {/*<Text*/}
-                                    {/*    style={{*/}
-                                    {/*        color: 'grey',*/}
-                                    {/*        fontSize: 18,*/}
-                                    {/*        fontWeight: 'bold',*/}
-
-                                    {/*    }}*/}
-                                    {/*>*/}
-                                    {/*    {item.studentName}*/}
-                                    {/*</Text>*/}
+                                    <Text
+                                        style={{
+                                            color: 'grey',
+                                            fontSize: 18,
+                                            fontWeight: 'bold',
+                                            margin:10
+                                        }}
+                                    >
+                                        {auth().currentUser.displayName}
+                                    </Text>
                                 </View>
                                 <Text
                                     style={{
                                         color: 'grey',
                                         marginHorizontal:10,
+
                                     }}
                                 >
-                                    السؤال
+                                    -السؤال
                                 </Text>
                                 <Text
                                     style={{
@@ -82,7 +76,7 @@ const MyQuestions = ({ loading,questions }) => {
 
                                 }}
                             >
-                                الاجابة
+                                -الاجابة
                             </Text>
                             <View
                                 style={{
@@ -90,7 +84,6 @@ const MyQuestions = ({ loading,questions }) => {
                                     backgroundColor: 'white',
                                     borderRadius: 20,
                                     alignSelf: 'center',
-                                    // alignItems: 'flex-start',
                                     shadowColor: 'black',
                                     elevation: 5,
                                     marginVertical: 10,
@@ -102,7 +95,7 @@ const MyQuestions = ({ loading,questions }) => {
                                         color: 'grey',
                                     }}
                                 >
-                                    {item.answer}
+                                    {!item.reply? 'لم يتم الرد على السؤال بعد':item.reply}
                                 </Text>
                             </View>
                             <BR/>

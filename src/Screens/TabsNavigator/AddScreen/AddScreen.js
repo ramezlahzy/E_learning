@@ -16,7 +16,7 @@ import {
     getAllLectures,
     getAllMonths,
     getAllOrderByLecture,
-    getAllOrderByMonth, getClassById,
+    getAllOrderByMonth, getClassById, getUserMonths, getUserMonthSubscriptions,
     openFacebookUrl
 } from "../../../Backend";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -25,49 +25,45 @@ import auth from "@react-native-firebase/auth";
 import {SubscriptionButton} from "../../components";
 
 const AddScreen = ({navigation}) => {
-    const [classes, setClasses] = useState(null);
-    const [months, setMonths] = useState(null);
-    const [lectures, setLectures] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [selectedClass, setSelectedClass] = useState(null);
+    const [userMonthSubscriptions, setUserMonthSubscriptions] = useState(null);
+    const [userMonths, setUserMonths] = useState(null);
     useEffect(() => {
         refresh();
     }, []);
     useEffect(() => {
-        if (months !== null && lectures !== null && classes !== null && selectedClass !== null) {
+        if (userMonths != null && userMonthSubscriptions != null) {
             setLoading(false);
         }
-    }, [months, lectures, classes, selectedClass])
+    }, [userMonths, userMonthSubscriptions])
 
     const refresh = () => {
         setLoading(true);
-        getAllClasses(setClasses).catch((e) => {
-            console.log("all classes", e);
+        getUserMonths(setUserMonths).catch((e) => {
+            console.log("user months", e);
         })
-        getAllLectures(setLectures).catch((e) => {
-            console.log("all lectures", e);
+        getUserMonthSubscriptions(setUserMonthSubscriptions).catch((e) => {
+            console.log("user month subscriptions", e);
         })
-        getClassById(setSelectedClass).catch((e) => {
-            console.log("class by id", e);
-        })
-        getAllMonths(setMonths).catch((e) => {
-            console.log("all month", e);
-        })
+
     }
 
     return (
         <ScrollView
+            style={{
+                backgroundColor: 'white'
+            }}
             refreshControl={
                 <RefreshControl refreshing={loading} onRefresh={refresh}/>
             }
         >
 
             {
-                (loading || (months === null || lectures === null || classes === null || selectedClass === null)) &&
+                (loading || (userMonths === null || userMonthSubscriptions === null)) &&
                 <LoadingAdd/>
             }
             {
-                !(loading || (months === null || lectures === null || classes === null || selectedClass === null)) &&
+                !(loading || (userMonths === null || userMonthSubscriptions === null)) &&
 
                 <View
                     style={{
@@ -83,8 +79,8 @@ const AddScreen = ({navigation}) => {
                             width: '100%',
                             marginBottom: 70,
                             height: 300,
-                            backgroundColor:'lightgrey',
-                            paddingBottom:40,
+                            backgroundColor: 'lightgrey',
+                            paddingBottom: 40,
                             borderBottomRightRadius: 40,
                             borderBottomLeftRadius: 40,
                         }}
@@ -139,12 +135,26 @@ const AddScreen = ({navigation}) => {
                     >
 
                         {
-                            months.filter((month) => {
-                                return month.class === selectedClass;
-                            }).sort((a, b) => {
+                            userMonths.length===0&&
+                            <Image
+                                source={require('../../../assets/noData.png')}
+                                style={{
+                                    width: '100%',
+                                    height: 200,
+                                    alignSelf: 'center',
+                                }}
+                                resizeMode={'contain'}
+                            />
+                        }
+                        {
+                            userMonths.sort((a, b) => {
                                 return a.number - b.number;
                             }).map((item, index) => {
-                                return (<Month month={item} index={index} lectures={lectures}
+                                return (<Month month={item} index={index} monthSubscription={userMonthSubscriptions.map(
+                                    (monthSubscription) => {
+                                        return monthSubscription.monthId
+                                    }
+                                )}
                                                key={index} navigation={navigation}/>)
                             })
                         }
@@ -154,8 +164,8 @@ const AddScreen = ({navigation}) => {
         </ScrollView>
     )
 }
-const Month = ({month, index, lectures, navigation}) => {
-    const isSubscribed = month.users.includes(auth().currentUser.uid);
+const Month = ({month, index, lectures, navigation,monthSubscription}) => {
+    const isSubscribed = monthSubscription.includes(month.id);
     const isFree = month.free;
     return (
         <View
@@ -279,11 +289,9 @@ const Month = ({month, index, lectures, navigation}) => {
                             fontSize: 13,
                         }}
                     >
-                        {lectures.filter(
-                            (lecture) => {
-                                return lecture.monthId === month.id;
-                            }
-                        ).length} محاضرة
+                        {
+                            month.free ? "مجاني" : "مدفوع"
+                        }
                     </Text>
                 </View>
 

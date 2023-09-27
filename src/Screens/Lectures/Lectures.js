@@ -1,22 +1,41 @@
 import {Image, Modal, ScrollView, Text, TouchableOpacity, View} from "react-native";
 import {useEffect, useState} from "react";
-import {getAllLectures, getLecturesByMonth, openFacebookUrl} from "../../Backend";
+import {
+    getAllLectures,
+    getLecturesByMonth,
+    getUserLectureSubscriptions,
+    getUserMonthSubscriptions,
+    openFacebookUrl
+} from "../../Backend";
 import LecturesLoading from "./LecturesLoading";
 import {ProgressBar, SubscriptionButton} from "../components";
 import auth from "@react-native-firebase/auth";
 
 const Lectures = ({navigation, route}) => {
-    const monthName = route.params.title;
     const month = route.params.month;
-    const [allLectures, setAllLectures] = useState([]);
+    const [lecturesByMonth, setLecturesByMonth] = useState(null);
     const [loading, setLoading] = useState(false);
     const [warningSubscribed, setWarningSubscribed] = useState(false);
+    const [userMonthSubscriptions, setUserMonthSubscriptions] = useState(null);
+    const [userLectureSubscriptions, setUserLectureSubscriptions] = useState(null);
     useEffect(() => {
         setLoading(true);
-        getLecturesByMonth(setAllLectures, month.id).then(() => {
-            setLoading(false);
-        });
+        getLecturesByMonth(setLecturesByMonth, month.id).catch((e) => {
+            console.log("lectures by month", e);
+        })
+        getUserMonthSubscriptions(setUserMonthSubscriptions).catch((e) => {
+            console.log("user month subscriptions", e);
+        })
+        getUserLectureSubscriptions(setUserLectureSubscriptions).catch((e) => {
+            console.log("user lecture subscriptions", e);
+        })
     }, [])
+    useEffect(() => {
+        if (userLectureSubscriptions != null && userMonthSubscriptions != null && lecturesByMonth.length != null) {
+            setLoading(false);
+        }
+    }, [lecturesByMonth, userMonthSubscriptions, userLectureSubscriptions])
+
     return (
         <ScrollView
             style={{
@@ -24,22 +43,41 @@ const Lectures = ({navigation, route}) => {
             }}
         >
             {
-                loading && <LecturesLoading/>
+                (loading || lecturesByMonth === null || userMonthSubscriptions === null || userLectureSubscriptions === null) &&
+                <LecturesLoading/>
             }
 
             {
-                !loading &&
+                !(loading || lecturesByMonth === null || userMonthSubscriptions === null || userLectureSubscriptions === null) &&
                 <View>
-                    <Image source={require('../../assets/calender.jpg')}
-                            style={{width: '100%', height: 300}}
-                    />
                     {
-                        allLectures.map((lecture, index) => {
+                        lecturesByMonth.length !== 0 &&
+
+                    <Image source={require('../../assets/calender.jpg')}
+                           style={{width: '100%', height: 300}}
+                    />
+                    }
+                    {
+                        lecturesByMonth.length === 0 &&
+                        <Image
+                            source={require('../../assets/noData.png')}
+                            style={{
+                                width: '100%',
+                                height: 300,
+                            }}
+                        />
+                    }
+                    {
+                        lecturesByMonth.map((lecture, index) => {
                             return (
                                 <Lecture lecture={lecture} navigation={navigation} month={month}
                                          warningSubscribed={warningSubscribed}
                                          setWarningSubscribed={setWarningSubscribed}
                                          key={index}
+                                         userMonthSubscriptions={userMonthSubscriptions.map(
+                                             (userMonthSubscription) => userMonthSubscription.monthId)}
+                                         userLectureSubscriptions={userLectureSubscriptions.map(
+                                             (userLectureSubscription) => userLectureSubscription.lectureId)}
                                 />
                             )
                         })
@@ -50,8 +88,16 @@ const Lectures = ({navigation, route}) => {
         </ScrollView>
     )
 }
-const Lecture = ({month, lecture, navigation, warningSubscribed, setWarningSubscribed}) => {
-    const isSubscribed = month.users.includes(auth().currentUser.uid) || lecture.users.includes(auth().currentUser.uid);
+const Lecture = ({
+                     month,
+                     lecture,
+                     navigation,
+                     warningSubscribed,
+                     setWarningSubscribed,
+                     userLectureSubscriptions,
+                     userMonthSubscriptions
+                 }) => {
+    const isSubscribed = userLectureSubscriptions.includes(lecture.id) || userMonthSubscriptions.includes(month.id);
     const isFree = month.free || lecture.free;
     return (
 

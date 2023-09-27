@@ -17,10 +17,18 @@ import StartExam from "./src/Screens/Exam/StartExam";
 import FinishedExam from "./src/Screens/Exam/FinishedExam";
 import ExamSolution from "./src/Screens/Exam/ExamSolution";
 import TestBank from "./src/Screens/TestBank/TestBank";
+import MySubscription from "./src/Screens/TabsNavigator/ProfileScreen/MySubscriptions/MySubscription";
+import SubscriptionByLecture
+    from "./src/Screens/TabsNavigator/ProfileScreen/MySubscriptions/SubscriptionByLecture/SubsrcitpionByLecture";
+import SubscriptionByMonth
+    from "./src/Screens/TabsNavigator/ProfileScreen/MySubscriptions/SubscriptionByMonth/SubscriptionByMonth";
+import MyExams from "./src/Screens/TabsNavigator/ProfileScreen/MyExams/MyExams";
+import NoData from "./src/Screens/NoData/NoData";
 
 const Stack = createNativeStackNavigator();
 
 function App() {
+
     return (
         <NavigationContainer>
             <Stack.Navigator>
@@ -95,6 +103,33 @@ function App() {
                               options={{
                                   title: "بنك الاسئلة",
                               }}/>
+                <Stack.Screen name={'MySubscription'} component={MySubscription}
+                              options={{
+                                  title: "اشتراكاتي",
+                                  // headerShown: false
+                              }}
+                />
+                <Stack.Screen name={'SubscriptionByMonth'} component={SubscriptionByMonth}
+                              options={{
+                                  title: "اشتراكاتي",
+
+                              }}
+                />
+                <Stack.Screen name={'SubscriptionByLecture'} component={SubscriptionByLecture}
+                              options={{
+                                  title: "اشتراكاتي",
+                              }}
+                />
+                <Stack.Screen name={'MyExams'} component={MyExams}
+                              options={{
+                                  title: "امتحاناتي",
+                              }}
+                />
+                <Stack.Screen name={'NoData'} component={NoData}
+                              options={{
+                                  headerShown: false
+                              }}
+                />
             </Stack.Navigator>
         </NavigationContainer>
     );

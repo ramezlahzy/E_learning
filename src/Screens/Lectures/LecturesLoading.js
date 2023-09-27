@@ -1,21 +1,24 @@
 import {FlatList, View} from "react-native";
+import {L} from "../components";
 
 const LecturesLoading = () => {
     const list = Array(8).fill(0);
     return (
         <View
+            style={{
+                flex: 1,
+                padding: 20,
+            }}
         >
-            <View
-                style={{
-                    height: 300,
-                    width: '90%',
-                    backgroundColor: 'lightgrey',
-                    alignSelf: 'center',
-                }}/>
+            {
+                L(300)
+            }
             {
                 list.map((item, index) => {
-                    return (
-                        <Item item={item} key={index}/>
+                    return(
+
+                            L(100)
+
                     )
                 })
             }

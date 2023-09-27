@@ -1,10 +1,15 @@
 import {Image, ScrollView, Text, TextInput, TouchableOpacity, View, Linking} from "react-native";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import auth from "@react-native-firebase/auth";
 import {openFacebookUrl} from "../../../Backend";
+import {useState} from "react";
+import {WebView} from "react-native-webview";
+
 
 const HomeScreen = ({navigation, route}) => {
+    const [playing, setPlaying] = useState(false);
 
+    const togglePlaying = () => {
+        setPlaying((prev) => !prev);
+    }
     return (
         <ScrollView>
             <View
@@ -75,7 +80,7 @@ const HomeScreen = ({navigation, route}) => {
                     }}>
                         <Text
                             style={{
-                                fontSize: 20,
+                                fontSize: 15,
                                 color: 'grey',
                             }}
                         >
@@ -91,7 +96,7 @@ const HomeScreen = ({navigation, route}) => {
                             }}
                         >
                             <Text style={{
-                                fontSize: 20,
+                                fontSize: 18,
                                 fontWeight: "bold",
                                 color: "white",
 
@@ -103,9 +108,16 @@ const HomeScreen = ({navigation, route}) => {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <Class clas={"الصف الاول الثانوى"} image={require('../../../assets/study1.jpg')}/>
-                <Class clas={"الصف الثانى الثانوى"} image={require('../../../assets/study2.jpg')}/>
-                <Class clas={"الصف الثالث الثانوى"} image={require('../../../assets/study3.jpg')}/>
+
+                <WebView
+                    style={{ marginTop: 40, width: 320, height: 230 ,borderRadius: 20}}
+                    javaScriptEnabled={true}
+                    domStorageEnabled={true}
+                    source={{ uri: "https://www.youtube.com/embed/lF_nCDFnPww" }}
+                />
+                {/*<Class clas={"الصف الاول الثانوى"} image={require('../../../assets/study1.jpg')}/>*/}
+                {/*<Class clas={"الصف الثانى الثانوى"} image={require('../../../assets/study2.jpg')}/>*/}
+                {/*<Class clas={"الصف الثالث الثانوى"} image={require('../../../assets/study3.jpg')}/>*/}
 
             </View>
         </ScrollView>

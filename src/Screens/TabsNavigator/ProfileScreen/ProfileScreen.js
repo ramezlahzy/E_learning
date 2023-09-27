@@ -1,6 +1,8 @@
 import {Image, ScrollView, Text, TouchableOpacity, View} from "react-native";
 import auth from "@react-native-firebase/auth";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import {openYoutubeUrl} from "../../../Backend";
+import {PoweredBy} from "../../components";
 
 const ProfileScreen = ({navigation}) => {
     return (
@@ -10,7 +12,7 @@ const ProfileScreen = ({navigation}) => {
                 <View
                     style={{
                         width: '100%',
-                        marginBottom: 100,
+                        marginBottom: 70,
                     }}
                 >
                     <View
@@ -31,7 +33,7 @@ const ProfileScreen = ({navigation}) => {
                     }}>
                         <Image
                             source={auth().currentUser.photoURL ? {uri: auth().currentUser.photoURL} : require('../../../assets/boring.jpg')}
-                            style={{width: 100, height: 100, borderRadius: 50, alignSelf: 'center', margin: 5}}/>
+                            style={{width: 100, height: 100, borderRadius: 50, alignSelf: 'center', margin: 10,borderWidth:3,borderColor:'white'}}/>
                         <View
                             style={{
                                 justifyContent: 'center',
@@ -67,27 +69,52 @@ const ProfileScreen = ({navigation}) => {
                         shadowColor: 'black',
                         elevation: 5,
                         bottom: -50,
-                        flexDirection: 'column',
-                        alignItems: 'flex-start',
+                        alignItems: 'center',
                         justifyContent: 'center',
                         padding: 15,
                         position: 'absolute',
-
+                        flexDirection: 'row',
                     }}>
+                        <TouchableOpacity
+                            style={{
+                                padding: 5,
+                                backgroundColor: '#d2bd00',
+                                borderRadius: 10,
+                                flexDirection: 'row',
+                            }}
+                            onPress={()=>openYoutubeUrl('https://www.youtube.com/watch?v=4gZFVrePKSU')}
+                            >
+                            <Text
+                                style={{
+                                    color:'white'
+                                }}
+                            >
+                                اتفرج
+                            </Text>
+                        </TouchableOpacity>
+                        <Text
+                            style={{
+                                fontSize: 20,
+                                color:'grey',
+                                margin:15,
+                                fontWeight:'bold'
+                            }}>
+                             افهم المنصة اكتر
+                        </Text>
                     </View>
                 </View>
-                <SettingComponent
-                    name={'تعديل الملف الشخصي'}
-                    iconName={'person-outline'}
-                    action={() => {
-                    }}
-                />
-
                 <SettingComponent
                     name={'جميع اشتراكاتي'}
                     iconName={'add'}
                     action={() => {
-
+                        navigation.navigate('MySubscription')
+                    }}
+                />
+                <SettingComponent
+                    name={'جميع امتحناتى'}
+                    iconName={'person-outline'}
+                    action={() => {
+                        navigation.navigate('MyExams')
                     }}
                 />
                 <SettingComponent
@@ -100,6 +127,13 @@ const ProfileScreen = ({navigation}) => {
 
                     }}
                 />
+                <View
+                    style={{
+                        marginTop: 20,
+                    }}>
+
+                <PoweredBy/>
+                </View>
             </View>
         </ScrollView>
     )

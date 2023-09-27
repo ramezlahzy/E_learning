@@ -4,6 +4,7 @@ import DisplayVideo from "../components/DisplayVideo";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import LectureContent from "./LectureContent/LectureContent";
 import StudentQuestions from "./StudentQuestions/StudentQuestions";
+import Announcements from "./Announcements/Announcements";
 
 const OneLecture = ({navigation, route}) => {
     const {lecture} = route.params;
@@ -98,6 +99,9 @@ const OneLecture = ({navigation, route}) => {
                     }
                     {
                         choose === 'اسأل براحتك' && <StudentQuestions navigation={navigation} lectureId={lecture.id}/>
+                    }
+                    {
+                        choose === 'تنبيهات' && <Announcements navigation={navigation} lectureId={lecture.id}/>
                     }
                 </View>
             </View>

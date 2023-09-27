@@ -1,20 +1,24 @@
 import {Text, View} from "react-native";
 import LoadingQuestions from "../LoadingQuestions";
 import {BR} from "../../../components";
+import {useEffect} from "react";
+import auth from "@react-native-firebase/auth";
 
-const OtherQuestions = ({ loading,questions }) => {
-    return(
+const OtherQuestions = ({loading, questions}) => {
+    const allQuestions = questions.filter(item =>item.reply !== undefined).sort((a, b) => b.date - a.date)
+    return (
         <View
             style={{
                 width: '100%',
+                minHeight: 100,
             }}
         >
             {
                 loading &&
                 <LoadingQuestions/>
             }
-            { !loading &&
-                questions.map((item, index) => {
+            {!loading &&
+                allQuestions.map((item, index) => {
                     return (
                         <View
                             key={index}
@@ -28,7 +32,6 @@ const OtherQuestions = ({ loading,questions }) => {
                                     backgroundColor: 'white',
                                     borderRadius: 20,
                                     alignSelf: 'center',
-                                    // alignItems: 'flex-start',
                                     shadowColor: 'black',
                                     elevation: 5,
                                     marginVertical: 10,
@@ -37,31 +40,22 @@ const OtherQuestions = ({ loading,questions }) => {
                                 }}
                             >
                                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                    {/*<Image*/}
-                                    {/*    source={item.studentImage}*/}
-                                    {/*    style={{*/}
-                                    {/*        width: 50,*/}
-                                    {/*        height: 50,*/}
-                                    {/*        borderRadius: 50,*/}
-                                    {/*        margin: 10,*/}
+                                    <Text
+                                        style={{
+                                            color: 'grey',
+                                            fontSize: 18,
+                                            fontWeight: 'bold',
+                                            margin:10
 
-                                    {/*    }}*/}
-                                    {/*/>*/}
-                                    {/*<Text*/}
-                                    {/*    style={{*/}
-                                    {/*        color: 'grey',*/}
-                                    {/*        fontSize: 18,*/}
-                                    {/*        fontWeight: 'bold',*/}
-
-                                    {/*    }}*/}
-                                    {/*>*/}
-                                    {/*    {item.studentName}*/}
-                                    {/*</Text>*/}
+                                        }}
+                                    >
+                                        {item.name}
+                                    </Text>
                                 </View>
                                 <Text
                                     style={{
                                         color: 'grey',
-                                        marginHorizontal:10,
+                                        marginHorizontal: 10,
                                     }}
                                 >
                                     السؤال
@@ -69,7 +63,7 @@ const OtherQuestions = ({ loading,questions }) => {
                                 <Text
                                     style={{
                                         color: 'grey',
-                                        margin:10
+                                        margin: 10
                                     }}
                                 >
                                     {item.question}
@@ -102,7 +96,7 @@ const OtherQuestions = ({ loading,questions }) => {
                                         color: 'grey',
                                     }}
                                 >
-                                    {item.answer}
+                                    {item.reply}
                                 </Text>
                             </View>
                             <BR/>

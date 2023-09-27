@@ -127,7 +127,6 @@ const Login = ({setStage, navigation}) => {
                     loading ?
                         <ActivityIndicator
                             size="large"
-                            color="blue"
                             style={{
                                 marginTop: 20,
 

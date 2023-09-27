@@ -3,6 +3,7 @@ import {GoogleSignin, statusCodes, GoogleSigninButton} from '@react-native-googl
 import {useState} from "react";
 import auth from '@react-native-firebase/auth';
 import {openFacebookUrl} from "../../Backend";
+import {PoweredBy} from "../components";
 
 GoogleSignin.configure({
     webClientId: '777807118707-4cnr5h2q2bqkgr92vbkrutl1ch61p9hg.apps.googleusercontent.com'
@@ -38,7 +39,7 @@ const Welcome = ({navigation, route}) => {
     };
     return (
         <ScrollView
-        style={{backgroundColor:'white'}}
+            style={{backgroundColor: 'white'}}
         >
 
             <View
@@ -79,7 +80,7 @@ const Welcome = ({navigation, route}) => {
                                 height: 50,
                             }}
                         >
-                            E-Learning
+                            The Doctor
                         </Text>
                         <Text
                             style={{
@@ -160,35 +161,7 @@ const Welcome = ({navigation, route}) => {
 
                         }}
                     >
-
-                        <Text
-                            style={{
-                                fontSize: 15,
-                                color: 'grey',
-                            }}
-                        >
-                          تواصل معنا عبر
-                        </Text>
-                        <View
-                            style={{
-                                width: '100%',
-                                display: 'flex',
-                                flexDirection: 'row',
-                                justifyContent: 'center',
-                            }}
-                        >
-                            {/*<TouchableOpacity>*/}
-                            {/*    <Image source={require('../../assets/icons8-facebook-48.png')}*/}
-                            {/*           style={{width: 50, height: 50, marginHorizontal: 10}}/>*/}
-                            {/*</TouchableOpacity>*/}
-                            <TouchableOpacity
-                                onPress={openFacebookUrl}
-                            >
-                                <Image source={require('../../assets/icons8-facebook-48.png')}
-                                       style={{width: 50, height: 50, marginHorizontal: 10,marginBottom:10}}/>
-                            </TouchableOpacity>
-
-                        </View>
+                        <PoweredBy/>
                     </View>
                 </View>
             </View>

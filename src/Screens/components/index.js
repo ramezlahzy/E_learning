@@ -1,6 +1,6 @@
-import {Text, TextInput, View, StyleSheet, TouchableOpacity, ToastAndroid} from "react-native";
+import {Text, TextInput, View, StyleSheet, TouchableOpacity, ToastAndroid, Image} from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import {openFacebookUrl} from "../../Backend";
+import {makeACall, openFacebookUrl, openMyLinkedInUrl, sendMail} from "../../Backend";
 import Svg, {Circle} from 'react-native-svg';
 import {useState} from "react";
 
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
         height: 10,
         margin: 10,
         backgroundColor: '#ccc',
-        borderRadius: 2,
+        borderRadius: 20,
         overflow: 'hidden',
         alignSelf: 'center',
     },
@@ -469,7 +469,95 @@ const Answers = ({
         }
     ))
 }
+const L = (height) => {
+    return (
+        <View
+            style={{
+                width: '100%',
+                backgroundColor: 'lightgrey',
+                borderRadius: 20,
+                alignSelf: 'center',
+                // alignItems: 'flex-start',
+                shadowColor: 'black',
+                elevation: 5,
+                marginVertical: 20,
+                padding: 10,
+                height: height
+            }}/>
+    )
+}
+
+const PoweredBy = () => {
+    return (
+        <View
+            style={{
+                // width: '100%',
+                alignItems: 'center',
+                justifyContent: 'center',
+                display: 'flex',
+            }}
+            onPress={openMyLinkedInUrl}
+        >
+            <TouchableOpacity
+                style={{
+                    alignItems: 'center',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    // padding: 10,
+                }}
+                onPress={openMyLinkedInUrl}
+
+            >
+
+                <Text
+                    style={{
+                        color: 'grey',
+                        textAlign: 'center',
+                        fontSize: 12,
+                    }}
+                >
+                    powered by
+                </Text>
+                <Image style={{
+                    width: 100,
+                    height: 50,
+                }}
+                       resizeMode={'contain'}
+                       source={require('../../assets/myLogo.png')}
+                />
+            </TouchableOpacity>
+            <TouchableOpacity
+                onPress={sendMail}
+            >
+            <Text
+                style={{
+                    color: 'grey',
+                    textAlign: 'center',
+                }}
+            >
+                rameznashaat9999@gmail.com
+            </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                onPress={makeACall}
+            >
+
+            <Text
+                style={{
+                    color: 'grey',
+                    textAlign: 'center',
+                    margin: 10,
+                }}
+            >
+                +201550575832
+            </Text>
+            </TouchableOpacity>
+
+        </View>
+    )
+}
 export {
     InputFeild, ProgressBar, SubscriptionButton, BR, secondsToMMSS, shuffleArray, showToast, CircularProgress,
-    TrueFalseQuestion, ChooseQuestion, Answers, TrueFalseAnswer
+    TrueFalseQuestion, ChooseQuestion, Answers, TrueFalseAnswer, L, PoweredBy,
 }

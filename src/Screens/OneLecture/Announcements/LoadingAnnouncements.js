@@ -1,8 +1,7 @@
 import {View} from "react-native";
 import {L} from "../../components";
 
-const LoadingQuestions = () => {
-
+const LoadingAnnouncements=()=>{
     return (
         <View
             style={{
@@ -20,4 +19,4 @@ const LoadingQuestions = () => {
 
     )
 }
-export default LoadingQuestions;
+export default LoadingAnnouncements;

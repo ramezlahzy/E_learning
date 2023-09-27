@@ -5,7 +5,7 @@ import {useEffect, useState} from "react";
 import auth from "@react-native-firebase/auth";
 import {updateLectureArrayField} from "../../../Backend";
 
-const LectureContent = ({lecture, setProgress,navigation}) => {
+const LectureContent = ({lecture, setProgress, navigation}) => {
     const [checkVideo, setCheckVideo] = useState(lecture.videoSeenUsers.includes(auth().currentUser.uid));
     const [checkBank, setCheckBank] = useState(lecture.bankSeenUsers.includes(auth().currentUser.uid));
     const [checkExam, setCheckExam] = useState(lecture.examSeenUsers.includes(auth().currentUser.uid));
@@ -37,8 +37,10 @@ const LectureContent = ({lecture, setProgress,navigation}) => {
                         fieldName={'bankSeenUsers'}
                         lecture={lecture}
                         action={() => {
-                            // console.log('بنك الاسئلة')
-                            navigation.navigate('TestBank',{testBankId:lecture.testBankId})
+                            if (lecture.testBankId)
+                                navigation.navigate('TestBank', {testBankId: lecture.testBankId})
+                            else
+                                navigation.navigate('NoData')
                         }}/>
 
             <CoursePart name={'امتحان على المحاضرة'} iconName={'stopwatch'}
@@ -47,13 +49,16 @@ const LectureContent = ({lecture, setProgress,navigation}) => {
                         fieldName={'examSeenUsers'}
                         lecture={lecture}
                         action={() => {
-                            navigation.navigate('Exam',{examId:lecture.examId})
+                            if (lecture.examId)
+                                navigation.navigate('Exam', {examId: lecture.examId})
+                            else
+                                navigation.navigate('NoData')
                         }}
             />
         </View>
     )
 }
-const CoursePart = ({action, name, iconName, checked, setChecked,fieldName,lecture}) => {
+const CoursePart = ({action, name, iconName, checked, setChecked, fieldName, lecture}) => {
     return (
         <TouchableOpacity
             style={{
@@ -108,15 +113,14 @@ const CoursePart = ({action, name, iconName, checked, setChecked,fieldName,lectu
                 <CheckBox
                     checked={checked}
                     onPress={() => {
-                        if(checked)
-                        {
-                            if(lecture[fieldName].includes(auth().currentUser.uid))
-                                lecture[fieldName].splice(lecture[fieldName].indexOf(auth().currentUser.uid),1)
-                            updateLectureArrayField(lecture.id,fieldName,false)
-                        }else{
-                            if(!lecture[fieldName].includes(auth().currentUser.uid))
+                        if (checked) {
+                            if (lecture[fieldName].includes(auth().currentUser.uid))
+                                lecture[fieldName].splice(lecture[fieldName].indexOf(auth().currentUser.uid), 1)
+                            updateLectureArrayField(lecture.id, fieldName, false)
+                        } else {
+                            if (!lecture[fieldName].includes(auth().currentUser.uid))
                                 lecture[fieldName].push(auth().currentUser.uid)
-                            updateLectureArrayField(lecture.id,fieldName,true)
+                            updateLectureArrayField(lecture.id, fieldName, true)
                         }
                         setChecked(!checked)
                     }}
