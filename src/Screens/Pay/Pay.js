@@ -131,7 +131,7 @@ const getToken = async () => {
     try {
         const apiUrl = 'https://accept.paymob.com/api/auth/tokens'; // Replace with your API URL
         const requestBody = {
-            "api_key": 'ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2libUZ0WlNJNkltbHVhWFJwWVd3aUxDSndjbTltYVd4bFgzQnJJam8xTWpVMU5EQjkuamU0b3h3V2wtS3BXeEs2YkhUNXpyWlFhSXQ2dUdYLWlnS3FObDkyMklBNm1lWGpZMlZjVE9HY0JEM0tuanliWWR4anE4TGswLWR5WmdHT1d0MHZLcnc='
+            "api_key": ''
         };
         const response = await fetch(apiUrl, {
             method: 'POST',
